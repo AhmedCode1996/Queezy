@@ -1,2 +1,4 @@
-prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
+pnpm lint-staged
+
+# Update git index to reflect changes made by formatting
 git update-index --again
