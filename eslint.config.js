@@ -5,7 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 
-export default [
+export default tseslint.config(
   {
     ignores: ["dist", "node_modules"],
     linterOptions: {
@@ -28,10 +28,11 @@ export default [
 
   {
     files: ["**/*.{ts,tsx}"],
-    ...tseslint.configs.recommended[0],
+    ...tseslint.configs.recommended,
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: globals.browser,
+      parser: tseslint.parser,
       parserOptions: {
         project: true,
         ecmaFeatures: {
@@ -55,8 +56,10 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      // Disable non-null assertion warnings
+      "@typescript-eslint/no-non-null-assertion": "off",
     },
   },
 
-  eslintConfigPrettier,
-];
+  eslintConfigPrettier
+);

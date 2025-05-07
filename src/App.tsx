@@ -1,7 +1,8 @@
 function App() {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">queezy</h1>
+      <h1 className="text-5xl font-bold">queezy</h1>
+      <p className="text-5xl">The best place to buy and sell your products</p>
     </div>
   );
 }
