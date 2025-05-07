@@ -1,65 +1,49 @@
 import js from "@eslint/js";
 import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
+import pluginReactHooks from "eslint-plugin-react-hooks";
 import eslintConfigPrettier from "eslint-config-prettier";
 
-export default tseslint.config(
+export default defineConfig([
+  // Ignore patterns
   {
-    ignores: ["dist", "node_modules"],
-    linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
+    ignores: ["dist/**", "node_modules/**", "build/**"],
   },
 
+  // Base configuration for all files
   {
-    files: ["**/*.{js,mjs,cjs}"],
-    ...js.configs.recommended,
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: "module",
       globals: {
-        ...globals.node,
         ...globals.browser,
+        ...globals.node,
       },
     },
   },
 
+  // Basic JS config
+  js.configs.recommended,
+
+  // TypeScript configuration
+  ...tseslint.configs.recommended,
+
+  // React configuration
   {
-    files: ["**/*.{ts,tsx}"],
-    ...tseslint.configs.recommended,
-    languageOptions: {
-      ecmaVersion: 2022,
-      globals: globals.browser,
-      parser: tseslint.parser,
-      parserOptions: {
-        project: true,
-        ecmaFeatures: {
-          jsx: true,
-        },
-        jsx: true,
-      },
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
+    files: ["**/*.{jsx,tsx}"],
     plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      // Note: plugins must be object with name as key and imported plugin as value
+      react: pluginReact,
+      "react-hooks": pluginReactHooks,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-      // Disable non-null assertion warnings
-      "@typescript-eslint/no-non-null-assertion": "off",
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
     },
   },
 
-  eslintConfigPrettier
-);
+  // Prettier compatibility - should be last
+  eslintConfigPrettier,
+]);
