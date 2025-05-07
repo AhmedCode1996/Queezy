@@ -34,6 +34,15 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: true,
+        ecmaFeatures: {
+          jsx: true,
+        },
+        jsx: true,
+      },
+    },
+    settings: {
+      react: {
+        version: "detect",
       },
     },
     plugins: {
